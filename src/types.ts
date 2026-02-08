@@ -39,3 +39,10 @@ export type PolicyNotRequiredRule = (
   context: EvaluationResult,
   policy?: Policy,
 ) => void;
+
+export type Rule = PolicyRequiredRule | PolicyNotRequiredRule;
+
+/**
+ *
+ */
+export type RuleSet = Rule[];
