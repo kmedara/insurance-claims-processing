@@ -6,6 +6,7 @@ import {
   payoutMustBeGreaterThanZero,
   policyCoversIncident,
   policyIsActiveOnIncidentDate,
+  payoutMustBeLessThanCoverageLimit,
 } from "./rules.js";
 
 describe("Rule Evaluation", () => {
@@ -16,9 +17,7 @@ describe("Rule Evaluation", () => {
     payout: 0,
     reasonCode: "APPROVED",
   });
-  /**
-   * Policy must be active on incident date
-   */
+
   it("Should not be approved if policy not active on incident date", () => {
     var result = _passingResult();
     const claim = _claim();
@@ -66,20 +65,15 @@ describe("Rule Evaluation", () => {
     assert.strictEqual(result.approved, false);
     assert.strictEqual(result.reasonCode, "ZERO_PAYOUT" as ReasonCode);
   });
+
+  it("Should not be approved if payout exceeds coverage limit", () => {
+    var result = _passingResult();
+    const claim = _claim();
+    var policy = _policies().find((p) => p.policyId === claim.policyId)!;
+
+    result.payout = policy.coverageLimit + 1;
+    payoutMustBeLessThanCoverageLimit(claim, result, policy);
+    assert.strictEqual(result.approved, false);
+    assert.strict(result.reasonCode, "EXCEEDS_COVERAGE_LIMIT" as ReasonCode);
+  });
 });
-
-/**
- * Incident type must be included in policy's covered incidents
- */
-
-/**
- * Payout = amountClaimed - deductible
- */
-
-/**
- * If payout is zero or negative, return 0 with reasonCode ZERO_PAYOUT
- */
-
-/**
- * Payout should not exceed coverage limit
- */

@@ -41,3 +41,14 @@ export const payoutMustBeGreaterThanZero: PolicyRequiredRule = (
     context.reasonCode = "ZERO_PAYOUT";
   }
 };
+
+export const payoutMustBeLessThanCoverageLimit: PolicyRequiredRule = (
+  claim,
+  context,
+  policy,
+) => {
+  if (context.payout > policy.coverageLimit) {
+    context.approved = false;
+    context.reasonCode = "EXCEEDS_COVERAGE_LIMIT";
+  }
+};

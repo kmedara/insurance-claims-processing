@@ -3,7 +3,8 @@ export type ReasonCode =
   | "APPROVED"
   | "POLICY_INACTIVE"
   | "NOT_COVERED"
-  | "ZERO_PAYOUT";
+  | "ZERO_PAYOUT"
+  | "EXCEEDS_COVERAGE_LIMIT";
 
 export type Claim = {
   policyId: string;
