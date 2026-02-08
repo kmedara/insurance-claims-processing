@@ -4,7 +4,7 @@ Core logic for an insurance claims processing system. The system evaluates incom
 
 ## Setup
 
-    1. running node 25+
+    1. running node 20+
     2. npm i
 
 ## Run
@@ -12,7 +12,7 @@ Core logic for an insurance claims processing system. The system evaluates incom
     1. npm run build
     2. npm run start
 
-## Testing
+## Test
 
     1. npm run build
     2. npm run test
@@ -28,6 +28,7 @@ upon start, the example claim will be evaluated and the result will be output to
   - Algorithms do not differ structurally
   - Frequent changes to rules are easier to manage
   - rules have no dependency, just react based on context
+- decorator pattern was almost an option, but behavior is not so much layered as it is conditional
 
 ## Enhancements
 
@@ -49,3 +50,5 @@ upon start, the example claim will be evaluated and the result will be output to
 <!-- - logic to change individual rule algorithms by state or some other factor, don't change logic at runtime, debugging nightmare-->
 - select rules based on a regulatory context
   - helps with auditing?
+- Dockerize for better cross platform dev UX
+  also allows for npm ci for better speed and dependency consistency
