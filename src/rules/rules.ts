@@ -52,3 +52,7 @@ export const payoutMustBeLessThanCoverageLimit: PolicyRequiredRule = (
     context.reasonCode = "EXCEEDS_COVERAGE_LIMIT";
   }
 };
+
+export const simplePayout: PolicyRequiredRule = (claim, context, policy) => {
+  context.payout = claim.amountClaimed - policy.deductible;
+};
