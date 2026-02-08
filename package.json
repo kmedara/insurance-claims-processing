@@ -1,0 +1,19 @@
+{
+  "name": "insurance-claims-processing",
+  "version": "1.0.0",
+  "description": "Core logic for insurance claims processing",
+  "license": "ISC",
+  "author": "Kevin Medara",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.ts",
+    "build": "npx tsc",
+    "test": "node --test dist/**/*.test.js",
+    "test:watch": "node --test --watch dist/**/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "typescript": "^5.9.3"
+  }
+}
