@@ -40,3 +40,4 @@ upon start, the example claim will be evaluated and the result will be output to
 - progress updates/events
 - dedicated rules engine class and supporting types
 - Integration testing and testing the rule pipeline
+- run same priority rules in parallel for performance?
