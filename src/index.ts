@@ -34,11 +34,11 @@ async function main() {
   //   });
 
   payoutCalculations.forEach((element) => {
-    element(claim, result, policy);
+    element({ claim, result, policy });
   });
 
   baseRuleSet.forEach((r) => {
-    r(claim, result, policy);
+    r({ claim, result, policy });
   });
   console.log(result);
 }

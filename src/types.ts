@@ -1,3 +1,5 @@
+import { exampleClaim } from "./data.js";
+
 export type IncidentType = "accident" | "theft" | "fire" | "water damage";
 export type ReasonCode =
   | "APPROVED"
@@ -28,17 +30,17 @@ export type EvaluationResult = {
   reasonCode: ReasonCode;
 };
 
-export type PolicyRequiredRule = (
-  claim: Claim,
-  context: EvaluationResult,
-  policy: Policy,
-) => void;
+export type ClaimContext = {
+  claim: Claim;
+  result: EvaluationResult;
+  policy?: Policy;
+};
+export type PolicyRequiredContext = ClaimContext &
+  Pick<Required<ClaimContext>, "policy">;
 
-export type PolicyNotRequiredRule = (
-  claim: Claim,
-  context: EvaluationResult,
-  policy?: Policy,
-) => void;
+export type PolicyRequiredRule = (context: PolicyRequiredContext) => void;
+
+export type PolicyNotRequiredRule = (context: ClaimContext) => void;
 
 export type Rule = PolicyRequiredRule | PolicyNotRequiredRule;
 

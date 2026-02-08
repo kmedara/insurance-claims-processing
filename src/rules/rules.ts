@@ -1,27 +1,26 @@
 import type { PolicyNotRequiredRule, PolicyRequiredRule } from "../types.js";
-
-export const policyIsActiveOnIncidentDate: PolicyRequiredRule = (
+export const policyIsActiveOnIncidentDate: PolicyRequiredRule = ({
   claim,
-  context,
+  result,
   policy,
-) => {
+}) => {
   if (
     !(claim.incidentDate >= policy.startDate) ||
     !(claim.incidentDate <= policy.endDate)
   ) {
-    context.approved = false;
-    context.reasonCode = "POLICY_INACTIVE";
+    result.approved = false;
+    result.reasonCode = "POLICY_INACTIVE";
   }
 };
 
-export const policyCoversIncident: PolicyRequiredRule = (
+export const policyCoversIncident: PolicyRequiredRule = ({
   claim,
-  context,
+  result,
   policy,
-) => {
+}) => {
   if (!policy.coveredIncidents.includes(claim.incidentType)) {
-    context.approved = false;
-    context.reasonCode = "NOT_COVERED";
+    result.approved = false;
+    result.reasonCode = "NOT_COVERED";
   }
 };
 
@@ -31,28 +30,27 @@ export const policyCoversIncident: PolicyRequiredRule = (
  * @param context
  * @param policy
  */
-export const payoutMustBeGreaterThanZero: PolicyRequiredRule = (
+export const payoutMustBeGreaterThanZero: PolicyNotRequiredRule = ({
   claim,
-  context,
-  policy,
-) => {
-  if (context.payout <= 0) {
-    context.approved = false;
-    context.reasonCode = "ZERO_PAYOUT";
+  result,
+}) => {
+  if (result.payout <= 0) {
+    result.approved = false;
+    result.reasonCode = "ZERO_PAYOUT";
   }
 };
 
-export const payoutMustBeLessThanCoverageLimit: PolicyRequiredRule = (
+export const payoutMustBeLessThanCoverageLimit: PolicyRequiredRule = ({
   claim,
-  context,
+  result,
   policy,
-) => {
-  if (context.payout > policy.coverageLimit) {
-    context.approved = false;
-    context.reasonCode = "EXCEEDS_COVERAGE_LIMIT";
+}) => {
+  if (result.payout > policy.coverageLimit) {
+    result.approved = false;
+    result.reasonCode = "EXCEEDS_COVERAGE_LIMIT";
   }
 };
 
-export const simplePayout: PolicyRequiredRule = (claim, context, policy) => {
-  context.payout = claim.amountClaimed - policy.deductible;
+export const simplePayout: PolicyRequiredRule = ({ claim, result, policy }) => {
+  result.payout = claim.amountClaimed - policy.deductible;
 };

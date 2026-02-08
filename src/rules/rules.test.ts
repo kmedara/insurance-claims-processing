@@ -28,7 +28,7 @@ describe("Rule Evaluation", () => {
       policy.startDate.getDate(),
     );
 
-    policyIsActiveOnIncidentDate(claim, result, policy);
+    policyIsActiveOnIncidentDate({ claim, result, policy });
     assert.strictEqual(result.approved, false);
     assert.strictEqual(result.reasonCode, "POLICY_INACTIVE" as ReasonCode);
   });
@@ -41,7 +41,7 @@ describe("Rule Evaluation", () => {
     policy.coveredIncidents = policy.coveredIncidents.filter(
       (x) => !policy.coveredIncidents.includes(x),
     );
-    policyCoversIncident(claim, result, policy);
+    policyCoversIncident({ claim, result, policy });
     assert.strictEqual(result.approved, false);
     assert.strictEqual(result.reasonCode, "NOT_COVERED" as ReasonCode);
   });
@@ -52,7 +52,7 @@ describe("Rule Evaluation", () => {
     var policy = _policies().find((p) => p.policyId === claim.policyId)!;
 
     result.payout = -4000;
-    payoutMustBeGreaterThanZero(claim, result, policy);
+    payoutMustBeGreaterThanZero({ claim, result, policy });
 
     assert.strictEqual(result.approved, false);
     assert.strictEqual(result.reasonCode, "ZERO_PAYOUT" as ReasonCode);
@@ -60,7 +60,7 @@ describe("Rule Evaluation", () => {
     result = _passingResult();
     result.payout = 0;
 
-    payoutMustBeGreaterThanZero(claim, result, policy);
+    payoutMustBeGreaterThanZero({ claim, result, policy });
 
     assert.strictEqual(result.approved, false);
     assert.strictEqual(result.reasonCode, "ZERO_PAYOUT" as ReasonCode);
@@ -72,7 +72,7 @@ describe("Rule Evaluation", () => {
     var policy = _policies().find((p) => p.policyId === claim.policyId)!;
 
     result.payout = policy.coverageLimit + 1;
-    payoutMustBeLessThanCoverageLimit(claim, result, policy);
+    payoutMustBeLessThanCoverageLimit({ claim, result, policy });
     assert.strictEqual(result.approved, false);
     assert.strict(result.reasonCode, "EXCEEDS_COVERAGE_LIMIT" as ReasonCode);
   });
