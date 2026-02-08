@@ -36,4 +36,5 @@ export type PolicyRequiredRule = (
 export type PolicyNotRequiredRule = (
   claim: Claim,
   context: EvaluationResult,
+  policy?: Policy,
 ) => void;
