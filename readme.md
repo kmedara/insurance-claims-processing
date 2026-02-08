@@ -45,3 +45,4 @@ upon start, the example claim will be evaluated and the result will be output to
 - short circuiting, stopping further pure evaluation when a rule doesn't pass
 - rule types for different phases of processing, i.e, defining seperate payout calculation and eligibility rule types
 - Stronger typing or rule types for different phases of processing, whether or not they require policy input or not, etc...
+- decision tables for eligibility, rules for payout math?
