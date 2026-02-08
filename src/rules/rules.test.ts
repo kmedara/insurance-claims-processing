@@ -2,7 +2,11 @@ import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import { exampleClaim, examplePolicies } from "../data.js";
 import type { Claim, EvaluationResult, Policy, ReasonCode } from "../types.js";
-import { policyCoversIncident, policyIsActiveOnIncidentDate } from "./rules.js";
+import {
+  payoutMustBeGreaterThanZero,
+  policyCoversIncident,
+  policyIsActiveOnIncidentDate,
+} from "./rules.js";
 
 describe("Rule Evaluation", () => {
   const _claim = (): Claim => exampleClaim;
@@ -41,6 +45,26 @@ describe("Rule Evaluation", () => {
     policyCoversIncident(claim, result, policy);
     assert.strictEqual(result.approved, false);
     assert.strictEqual(result.reasonCode, "NOT_COVERED" as ReasonCode);
+  });
+
+  it("Should not be approved if payout is zero or negative", () => {
+    var result = _passingResult();
+    const claim = _claim();
+    var policy = _policies().find((p) => p.policyId === claim.policyId)!;
+
+    result.payout = -4000;
+    payoutMustBeGreaterThanZero(claim, result, policy);
+
+    assert.strictEqual(result.approved, false);
+    assert.strictEqual(result.reasonCode, "ZERO_PAYOUT" as ReasonCode);
+
+    result = _passingResult();
+    result.payout = 0;
+
+    payoutMustBeGreaterThanZero(claim, result, policy);
+
+    assert.strictEqual(result.approved, false);
+    assert.strictEqual(result.reasonCode, "ZERO_PAYOUT" as ReasonCode);
   });
 });
 

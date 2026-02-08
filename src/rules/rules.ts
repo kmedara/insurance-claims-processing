@@ -24,3 +24,20 @@ export const policyCoversIncident: PolicyRequiredRule = (
     context.reasonCode = "NOT_COVERED";
   }
 };
+
+/**
+ * Does not calculate payout, calculation is seperate
+ * @param claim
+ * @param context
+ * @param policy
+ */
+export const payoutMustBeGreaterThanZero: PolicyRequiredRule = (
+  claim,
+  context,
+  policy,
+) => {
+  if (context.payout <= 0) {
+    context.approved = false;
+    context.reasonCode = "ZERO_PAYOUT";
+  }
+};
