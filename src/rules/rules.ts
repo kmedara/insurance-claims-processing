@@ -1,6 +1,6 @@
-import type { PolicyRequiredRule } from "../types.js";
+import type { PolicyNotRequiredRule, PolicyRequiredRule } from "../types.js";
 
-export const PolicyIsActiveOnIncidentDate: PolicyRequiredRule = (
+export const policyIsActiveOnIncidentDate: PolicyRequiredRule = (
   claim,
   context,
   policy,
@@ -11,5 +11,16 @@ export const PolicyIsActiveOnIncidentDate: PolicyRequiredRule = (
   ) {
     context.approved = false;
     context.reasonCode = "POLICY_INACTIVE";
+  }
+};
+
+export const policyCoversIncident: PolicyRequiredRule = (
+  claim,
+  context,
+  policy,
+) => {
+  if (!policy.coveredIncidents.includes(claim.incidentType)) {
+    context.approved = false;
+    context.reasonCode = "NOT_COVERED";
   }
 };

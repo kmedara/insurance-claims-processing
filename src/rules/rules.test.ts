@@ -1,8 +1,8 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
 import { exampleClaim, examplePolicies } from "../data.js";
-import type { Claim, EvaluationResult, Policy } from "../types.js";
-import { PolicyIsActiveOnIncidentDate } from "./rules.js";
+import type { Claim, EvaluationResult, Policy, ReasonCode } from "../types.js";
+import { policyCoversIncident, policyIsActiveOnIncidentDate } from "./rules.js";
 
 describe("Rule Evaluation", () => {
   const _claim = (): Claim => exampleClaim;
@@ -25,9 +25,22 @@ describe("Rule Evaluation", () => {
       policy.startDate.getDate(),
     );
 
-    PolicyIsActiveOnIncidentDate(claim, result, policy);
+    policyIsActiveOnIncidentDate(claim, result, policy);
     assert.strictEqual(result.approved, false);
-    assert.strictEqual(result.reasonCode, "POLICY_INACTIVE");
+    assert.strictEqual(result.reasonCode, "POLICY_INACTIVE" as ReasonCode);
+  });
+
+  it("Should not be approved if incident not covered by policy", () => {
+    var result = _passingResult();
+    const claim = _claim();
+    var policy = _policies().find((p) => p.policyId === claim.policyId)!;
+
+    policy.coveredIncidents = policy.coveredIncidents.filter(
+      (x) => !policy.coveredIncidents.includes(x),
+    );
+    policyCoversIncident(claim, result, policy);
+    assert.strictEqual(result.approved, false);
+    assert.strictEqual(result.reasonCode, "NOT_COVERED" as ReasonCode);
   });
 });
 
